@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: gateway
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9090/realms/ne_realm
+          audiences:
+            - api-gateway
+
+keycloak:
+  token-url: http://localhost:9090/realms/ne_realm/protocol/openid-connect/token
+  client-id: api-gateway
+  client-secret: ${API_GATEWAY_SECRET}
+
+logging:
+  level:
+    org.springframework.security: TRACE
+    org.springframework.security.oauth2: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+
+server:
+  port: 9092
