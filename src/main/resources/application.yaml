@@ -13,7 +13,7 @@ spring:
 keycloak:
   token-url: http://localhost:9090/realms/ne_realm/protocol/openid-connect/token
   client-id: api-gateway
-  client-secret: ${API_GATEWAY_SECRET}
+  client-secret: AbEijhwcgNk6kxX7FMSaiM0aW4rdPXOaAkWcATflrNcu9Ao8iSTVGZCTP73cvGHmSTxUakdeIvoMy1I8Zy7DtD
 
 logging:
   level:

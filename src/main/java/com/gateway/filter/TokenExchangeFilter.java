@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 
 
 
-@Component
+//@Component
 public class TokenExchangeFilter implements GlobalFilter, Ordered {
 
     private static final Logger log =

@@ -12,11 +12,23 @@ public class GatewayApplication {
 
 	public static void main(String[] args) {
 
-		System.out.println(
-				"API_GATEWAY_SECRET exists: " +
-						(System.getenv("API_GATEWAY_SECRET") != null)
-		);
-		SpringApplication.run(GatewayApplication.class, args);
+		SpringApplication app =
+				new SpringApplication(GatewayApplication.class);
+
+		app.addInitializers(context -> {
+			var environment = context.getEnvironment();
+
+			System.out.println(
+					"ENV API_GATEWAY_SECRET: " +
+							(environment.getProperty("API_GATEWAY_SECRET") )
+			);
+
+			System.out.println(
+					"PROPERTY keycloak.client-secret: " +
+							(environment.getProperty("keycloak.client-secret"))
+			);
+		});
+		app.run(args);
 	}
 
 	@RequestMapping(path = "/ente-fallback")

@@ -1,7 +1,9 @@
 package com.gateway.service;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -22,19 +24,24 @@ public class TokenExchangeService {
     private final String clientId;
     private final String clientSecret;
 
+    private final Environment environment;
+
     public TokenExchangeService(
             WebClient.Builder builder,
             @Value("${keycloak.token-url}") String tokenUrl,
-            @Value("${keycloak.client-id}") String clientId,
-            @Value("${keycloak.client-secret}") String clientSecret) {
+            @Value("${keycloak.client-id}") String clientId, String clientId1, String clientSecret,
+            Environment environment) {
 
         this.webClient = builder.build();
         this.tokenUrl = tokenUrl;
-        this.clientId = clientId;
+        this.clientId = clientId1;
         this.clientSecret = clientSecret;
+
+        this.environment = environment;
     }
 
     public Mono<String> exchange(
+            this.clientSecret = environment.getProperty("keycloak.client-secret");
             String subjectToken,
             String targetAudience) {
 

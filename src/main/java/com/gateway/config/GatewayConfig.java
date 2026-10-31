@@ -11,19 +11,31 @@ import org.springframework.http.HttpStatus;
 public class GatewayConfig {
 
     @Bean
-    public RouteLocator routeLocator(RouteLocatorBuilder builder) {
+    public RouteLocator routeLocator(
+            RouteLocatorBuilder builder,
+            TokenExchangeGatewayFilterFactory tokenExchangeFactory) {
+
+        // Configure the target audience for ente-service
+        TokenExchangeGatewayFilterFactory.Config enteConfig =
+                new TokenExchangeGatewayFilterFactory.Config();
+
+        enteConfig.setTargetAudience("ente-service");
 
         return builder.routes()
                 .route("ente-route", r -> r
                         .path("/api/ente/**")
                         .filters(f -> f
+                                .filter(tokenExchangeFactory.apply(enteConfig))
+
                                 .retry(retryConfig -> retryConfig
                                         .setRetries(3)
-                                        .setStatuses(HttpStatus.BAD_GATEWAY,
+                                        .setStatuses(
+                                                HttpStatus.BAD_GATEWAY,
                                                 HttpStatus.SERVICE_UNAVAILABLE,
                                                 HttpStatus.GATEWAY_TIMEOUT)
                                         .setMethods(HttpMethod.GET)
                                 )
+
                                 .circuitBreaker(config -> config
                                         .setName("enteCircuitBreaker")
                                         .setFallbackUri("forward:/ente-fallback")
